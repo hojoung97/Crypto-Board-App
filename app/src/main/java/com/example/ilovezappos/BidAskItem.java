@@ -5,7 +5,7 @@ public class BidAskItem {
     private float bidPrice;
     private float askAmount;
     private float askPrice;
-    
+
     public BidAskItem() {
 
     }

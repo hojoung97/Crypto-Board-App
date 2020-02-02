@@ -1,28 +1,35 @@
 package com.example.ilovezappos;
 
 public class BidAskItem {
-    private float bidAmount;
-    private float bidPrice;
-    private float askAmount;
-    private float askPrice;
+    private String bidPrice;
+    private String bidAmount;
+    private String askPrice;
+    private String askAmount;
     
-    public BidAskItem() {
+    public BidAskItem(String bidPrice,
+                      String bidAmount,
+                      String askPrice,
+                      String askAmount) {
 
+        this.bidPrice = bidPrice;
+        this.bidAmount = bidAmount;
+        this.askPrice = askPrice;
+        this.askAmount = askAmount;
     }
 
-    public float getBidAmount() {
+    public String getBidAmount() {
         return bidAmount;
     }
 
-    public float getBidPrice() {
+    public String getBidPrice() {
         return bidPrice;
     }
 
-    public float getAskAmount() {
+    public String getAskAmount() {
         return askAmount;
     }
 
-    public float getAskPrice() {
+    public String getAskPrice() {
         return askPrice;
     }
 }

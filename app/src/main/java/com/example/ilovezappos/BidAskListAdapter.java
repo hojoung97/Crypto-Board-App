@@ -3,12 +3,18 @@ package com.example.ilovezappos;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class BidAskListAdapter extends RecyclerView.Adapter<BidAskListAdapter.BidAskListViewHolder> {
-    // private .... some type to hold my order book data
+
+    private ArrayList<BidAskItem> bidAskData;
+    private static final int PRICE = 0;
+    private static final int AMOUNT = 1;
 
     // Here I will make a nested class called BidAskListViewHolder
     // This class will provide reference to the views of each item
@@ -21,8 +27,21 @@ public class BidAskListAdapter extends RecyclerView.Adapter<BidAskListAdapter.Bi
         }
     }
 
-    public BidAskListAdapter() {
+    public BidAskListAdapter(OrderBook orderBook) {
+        bidAskData = new ArrayList<>();
 
+        if (orderBook == null) {
+            return;
+        }
+
+        for(int i = 0; i < orderBook.getAsks().length; i++) {
+            bidAskData.add(new BidAskItem(
+                    orderBook.getBids()[i][PRICE],
+                    orderBook.getBids()[i][AMOUNT],
+                    orderBook.getAsks()[i][PRICE],
+                    orderBook.getAsks()[i][AMOUNT]
+            ));
+        }
     }
 
     // Create new views (this is invoked by layout manager)
@@ -39,10 +58,18 @@ public class BidAskListAdapter extends RecyclerView.Adapter<BidAskListAdapter.Bi
     @Override
     public void onBindViewHolder(@NonNull BidAskListViewHolder holder, int position) {
 
+        ((TextView)holder.itemView.findViewById(R.id.bid_price)).setText(
+                bidAskData.get(position).getBidPrice());
+        ((TextView)holder.itemView.findViewById(R.id.bid_amount)).setText(
+                bidAskData.get(position).getBidAmount());
+        ((TextView)holder.itemView.findViewById(R.id.ask_price)).setText(
+                bidAskData.get(position).getAskPrice());
+        ((TextView)holder.itemView.findViewById(R.id.ask_amount)).setText(
+                bidAskData.get(position).getAskAmount());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return bidAskData.size();
     }
 }

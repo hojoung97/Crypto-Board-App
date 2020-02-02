@@ -7,6 +7,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface BitStampAPI {
-    @GET("order_book/{currency_pair}/")
-    Call<List<OrderBook>> getOrderBooks(@Path("currency_pair") String currency_pair);
+    @GET("order_book/btcusd")
+    Call<OrderBook> getOrderBooks();
+    //@Path("currency_pair") String currency_pair
 }

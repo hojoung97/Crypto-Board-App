@@ -2,20 +2,20 @@ package com.example.ilovezappos;
 
 public class OrderBook {
     // API response items
-    private long timestamp;
-    private float[][] bids;
-    private float[][] asks;
+    private String timestamp;
+    private String[][] bids;
+    private String[][] asks;
 
     // getter methods
-    public long getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public float[][] getBids() {
+    public String[][] getBids() {
         return bids;
     }
 
-    public float[][] getAsks() {
+    public String[][] getAsks() {
         return asks;
     }
 }

@@ -13,11 +13,22 @@
         android:orientation="vertical">
 
         <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/chart"
+            android:id="@+id/price_chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bids_ask_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/button_set_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_notification"/>
 
     </LinearLayout>
 

@@ -1,21 +1,26 @@
 package com.example.ilovezappos;
 
+import com.google.gson.annotations.SerializedName;
+
 public class OrderBook {
     // API response items
-    private long timestamp;
-    private float[][] bids;
-    private float[][] asks;
+    //@SerializedName("timestamp")
+    private String timestamp;
+    //@SerializedName("bids")
+    private String[][] bids;
+    //@SerializedName("asks")
+    private String[][] asks;
 
     // getter methods
-    public long getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public float[][] getBids() {
+    public String[][] getBids() {
         return bids;
     }
 
-    public float[][] getAsks() {
+    public String[][] getAsks() {
         return asks;
     }
 }

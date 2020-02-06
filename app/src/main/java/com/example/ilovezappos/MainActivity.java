@@ -2,8 +2,11 @@ package com.example.ilovezappos;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView botNavBar;
 
     // Fragments
-    final Fragment homeFragment = new HomeFragment();
-    final Fragment transactionsFragment = new TransactionsFragment();
-    final Fragment orderBookFragment = new OrderBookFragment();
-    final FragmentManager fragManager = getSupportFragmentManager();
+    Fragment homeFragment = new HomeFragment();
+    Fragment transactionsFragment = new TransactionsFragment();
+    Fragment orderBookFragment = new OrderBookFragment();
+    FragmentManager fragManager = getSupportFragmentManager();
     Fragment active = homeFragment;
 
     @Override
@@ -58,18 +61,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragManager.beginTransaction().add(R.id.main_fragment_layout, transactionsFragment, "0")
+        // the three main fragments
+        fragManager.beginTransaction().add(R.id.main_fragment_layout, transactionsFragment, "transaction")
                 .hide(transactionsFragment).commit();
-        fragManager.beginTransaction().add(R.id.main_fragment_layout, orderBookFragment, "2")
+        fragManager.beginTransaction().add(R.id.main_fragment_layout, orderBookFragment, "order")
                 .hide(orderBookFragment).commit();
-        fragManager.beginTransaction().add(R.id.main_fragment_layout, homeFragment, "1").commit();
+        fragManager.beginTransaction().add(R.id.main_fragment_layout, homeFragment, "home").commit();
 
         // Bottom Navigation Bar
         botNavBar = findViewById(R.id.bot_nav_bar);
         botNavBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
                 switch(menuItem.getItemId()) {
                     case R.id.transaction_nav_icon:
                         fragManager.beginTransaction().hide(active).show(transactionsFragment).commit();
@@ -84,11 +87,9 @@ public class MainActivity extends AppCompatActivity {
                         active = orderBookFragment;
                         return true;
                 }
-
                 return false;
             }
         });
-
     }
 
 }

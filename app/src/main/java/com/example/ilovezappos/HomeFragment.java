@@ -1,10 +1,14 @@
 package com.example.ilovezappos;
 
 
+import android.app.Activity;
+import android.app.Notification;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -41,10 +45,18 @@ public class HomeFragment extends Fragment {
     private TextView notificationValue;
     private TextView lastUpdateDate;
 
+    // notification card
+    CardView notificationCard;
 
     // Retrofit object
     private Retrofit retrofit;
     private BitStampAPI bitStampAPI;
+
+    // Notification Setting Result Flag
+    private static final int NOTIFICATION_SET_REQUEST = 0;
+
+    // Notification Setting Value
+    String notificationSetValue = null;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -69,12 +81,21 @@ public class HomeFragment extends Fragment {
         notificationValue = view.findViewById(R.id.notification_value);
         lastUpdateDate = view.findViewById(R.id.last_update_info);
 
+        // notification cardview
+        notificationCard = view.findViewById(R.id.notification_card);
+        notificationCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent gotoNotificationSettingPage = new Intent(v.getContext(), NotificationActivity.class);
+                startActivityForResult(gotoNotificationSettingPage, NOTIFICATION_SET_REQUEST);
+            }
+        }); // onActivityResult() method will handle the result upon returning to MainActivity
+
         // Setup HTTP request handler using Retrofit
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://www.bitstamp.net/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         bitStampAPI = retrofit.create(BitStampAPI.class);
 
         getHourlyTicker();
@@ -127,4 +148,29 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == NOTIFICATION_SET_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                notificationSetValue = data.getStringExtra("setting");
+                notificationValue.setText(notificationSetValue);
+            }
+        }
+    }
+
+    // Notification Related Methods
+    private Notification getNotification() {
+        Notification.Builder builder;
+
+        // checking for Android OS version
+        // when working with Android 8.0 (API level 26) or higher, must implement at least one
+        // notification channels
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            builder = new Notification.Builder(getView().getContext(), "my_channel_01");
+        } else {
+            builder = new Notification.Builder(getView().getContext());
+        }
+    }
 }

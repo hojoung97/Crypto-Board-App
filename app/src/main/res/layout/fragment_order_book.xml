@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".OrderBookFragment">
 
+    <TextView
+        android:id="@+id/orderbook_frag_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Order Book"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="26sp"
+        android:padding="8dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/recyclerview_title_layout"
         android:layout_width="match_parent"
@@ -23,7 +37,6 @@
             android:id="@+id/bid_title_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ask_title_layout"
             app:layout_constraintHorizontal_bias="0.5"
@@ -95,10 +108,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bids_asks_list"
         android:layout_width="match_parent"
-        android:layout_height="190dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="458dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

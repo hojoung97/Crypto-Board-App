@@ -3,13 +3,20 @@ package com.example.ilovezappos;
 
 import android.app.Activity;
 import android.app.Notification;
-import android.app.PendingIntent;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +27,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -101,6 +109,62 @@ public class HomeFragment extends Fragment {
 
         getHourlyTicker();
 
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        PeriodicWorkRequest hitApi = new PeriodicWorkRequest.Builder(HourlyTickerWorker.class, 1, TimeUnit.SECONDS)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager.getInstance(getContext()).getWorkInfoByIdLiveData(hitApi.getId())
+                .observe(getViewLifecycleOwner(), info -> {
+                    if (info != null && info.getState().isFinished()) {
+
+                        String last = info.getOutputData().getString("last");
+                        String high = info.getOutputData().getString("high");
+                        String low = info.getOutputData().getString("low");
+                        String vwap = info.getOutputData().getString("vwap");
+                        float volume = info.getOutputData().getFloat("volume", 0f);
+                        String bid = info.getOutputData().getString("bid");
+                        String ask = info.getOutputData().getString("ask");
+                        String timestamp = info.getOutputData().getString("timestamp");
+                        String open = info.getOutputData().getString("open");
+
+                        // set the result
+                        highPriceValue.setText(high);
+                        lowPriceValue.setText(low);
+                        lastBtcValue.setText(last);
+                        firstBtcValue.setText(open);
+                        highBuyValue.setText(bid);
+                        lowSellValue.setText(ask);
+                        vwapValue.setText(vwap);
+
+                        double volumestr = Math.round(volume * 100.0) / 100.0;
+                        volumeValue.setText(Double.toString(volumestr));
+
+                        // Get the timestamp into string
+                        long timestampLong = Long.parseLong(timestamp);
+                        Date date = new Date(timestampLong * 1000);
+
+                        // convert Date object into String
+                        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+                        String strDate = df.format(date);
+
+                        lastUpdateDate.append(strDate);
+
+                        issueNotification(getNotification());
+
+                        if (notificationSetValue != null) {
+                            Double notiValueNum = Double.parseDouble(notificationSetValue);
+                            Double lastbtcvalue = Double.parseDouble(last);
+                            if (notiValueNum < lastbtcvalue) {
+                                issueNotification(getNotification());
+                            }
+                        }
+                    }
+                });
+
         return view;
     }
 
@@ -111,7 +175,7 @@ public class HomeFragment extends Fragment {
         tickerResult.enqueue(new Callback<TickerInfo>() {
             @Override
             public void onResponse(Call<TickerInfo> call, Response<TickerInfo> response) {
-                if(!response.isSuccessful()) {
+                if (!response.isSuccessful()) {
                     return;
                 }
 
@@ -133,13 +197,24 @@ public class HomeFragment extends Fragment {
 
                 // Get the timestamp into string
                 long timestamp = Long.parseLong(tickerInfo.getTimestamp());
-                Date date = new Date(timestamp*1000);
+                Date date = new Date(timestamp * 1000);
 
                 // convert Date object into String
                 DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
                 String strDate = df.format(date);
 
                 lastUpdateDate.append(strDate);
+
+                issueNotification(getNotification());
+
+                if (notificationSetValue != null) {
+                    Double notiValueNum = Double.parseDouble(notificationSetValue);
+                    Double lastbtcvalue = Double.parseDouble(tickerInfo.getLast());
+                    if (notiValueNum < lastbtcvalue) {
+                        issueNotification(getNotification());
+                    }
+                }
+
             }
 
             @Override
@@ -175,19 +250,33 @@ public class HomeFragment extends Fragment {
         }
         builder.setContentTitle("ILoveZappos");
         builder.setContentText("The price has fallen below!");
-        builder.setSmallIcon(R.drawable.splash_background);
+        builder.setSmallIcon(R.drawable.zappos_logo);
         return builder.build();
     }
 
-    private void scheduleNotification(Notification notification, String date) {
-        Intent notificationIntent = new Intent(getView().getContext(), NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, NOTIFICATION_ID++);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getView().getContext(),
-                0,
-                notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+    private void issueNotification(Notification notification) {
 
+        NotificationManager notificationManager =
+                (NotificationManager) getView().getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Create a notification channel
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String CHANNEL_ID = "price_alert_id";
+            CharSequence name = "price_alert_channel";
+            String Description = "price alert notification channel";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            mChannel.setDescription(Description);
+            mChannel.enableLights(true);
+            mChannel.setLightColor(Color.GREEN);
+            mChannel.enableVibration(true);
+            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            mChannel.setShowBadge(false);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+
+        // issue the notification
+        notificationManager.notify(NOTIFICATION_ID++, notification);
 
     }
 }

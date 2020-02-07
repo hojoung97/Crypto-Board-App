@@ -6,7 +6,7 @@ public class TickerInfo {
     private String high;
     private String low;
     private String vwap;
-    private double volume;
+    private float volume;
     private String bid;
     private String ask;
     private String timestamp;
@@ -28,7 +28,7 @@ public class TickerInfo {
         return vwap;
     }
 
-    public double getVolume() {
+    public float getVolume() {
         return volume;
     }
 

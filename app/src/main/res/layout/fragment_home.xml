@@ -13,8 +13,8 @@
         android:text="Overview"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:textSize="26sp"
-        android:padding="8dp"
+        android:textSize="@dimen/textsize_title"
+        android:padding="@dimen/margin_small"
         android:background="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
         android:id="@+id/card1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/margin_medium"
         app:layout_constraintBottom_toTopOf="@id/card3"
         app:layout_constraintEnd_toStartOf="@id/card2"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="@dimen/margin_small">
 
             <TextView
                 android:id="@+id/high_price_value"
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/cardview_textsize"
                 android:textStyle="bold" />
 
             <TextView
@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Highest Price"
-                android:textSize="14sp" />
+                android:textSize="@dimen/cardview_description_textsize" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -64,15 +64,15 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/cardview_textsize"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/low_price_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lowest Price"
-                android:textSize="14sp" />
+                android:text="@string/lowest_price"
+                android:textSize="@dimen/cardview_description_textsize" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/cardview_textsize"
                 android:textStyle="bold" />
 
             <TextView
@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Last BTC Price"
-                android:textSize="14sp" />
+                android:textSize="@dimen/cardview_description_textsize" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/cardview_textsize"
                 android:textStyle="bold" />
 
             <TextView
@@ -129,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="First BTC Price (Day)"
-                android:textSize="14sp" />
+                android:textSize="@dimen/cardview_description_textsize" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/cardview_textsize"
                 android:textStyle="bold" />
 
             <TextView
@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Highest Buy Order"
-                android:textSize="14sp" />
+                android:textSize="@dimen/cardview_description_textsize" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -177,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/cardview_textsize"
                 android:textStyle="bold" />
 
             <TextView
@@ -185,7 +185,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Lowest Sell Order"
-                android:textSize="14sp" />
+                android:textSize="@dimen/cardview_description_textsize" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -212,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/cardview_textsize"
                 android:textStyle="bold" />
 
             <TextView
@@ -220,7 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="VWAP"
-                android:textSize="14sp" />
+                android:textSize="@dimen/cardview_description_textsize" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -233,7 +233,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/cardview_textsize"
                 android:textStyle="bold" />
 
             <TextView
@@ -241,7 +241,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Volume"
-                android:textSize="14sp" />
+                android:textSize="@dimen/cardview_description_textsize" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -267,7 +267,7 @@
                 android:layout_height="wrap_content"
                 android:text="No Setting"
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/cardview_textsize"
                 android:textStyle="bold"/>
 
             <TextView

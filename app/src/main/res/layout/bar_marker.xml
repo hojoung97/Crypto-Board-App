@@ -9,35 +9,32 @@
         android:id="@+id/marker_id_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="ID: "
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black"
-        android:textSize="10sp" />
+        android:textSize="@dimen/markerview_textsize" />
 
     <TextView
         android:id="@+id/marker_price_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="Price: "
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black"
-        android:textSize="10sp" />
+        android:textSize="@dimen/markerview_textsize" />
 
     <TextView
         android:id="@+id/marker_date_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="Date: "
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black"
-        android:textSize="10sp" />
+        android:textSize="@dimen/markerview_textsize" />
 </LinearLayout>

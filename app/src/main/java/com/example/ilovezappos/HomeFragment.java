@@ -3,10 +3,10 @@ package com.example.ilovezappos;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -55,8 +55,9 @@ public class HomeFragment extends Fragment {
     // Notification Setting Result Flag
     private static final int NOTIFICATION_SET_REQUEST = 0;
 
-    // Notification Setting Value
+    // Notification variables
     String notificationSetValue = null;
+    public static int NOTIFICATION_ID = 0;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -105,7 +106,7 @@ public class HomeFragment extends Fragment {
 
     // Wrapper method requesting hourly ticker info and putting those data into CardViews
     private void getHourlyTicker() {
-        Call<TickerInfo> tickerResult = bitStampAPI.getHourlyTicker("btcusd");
+        final Call<TickerInfo> tickerResult = bitStampAPI.getHourlyTicker("btcusd");
 
         tickerResult.enqueue(new Callback<TickerInfo>() {
             @Override
@@ -172,5 +173,21 @@ public class HomeFragment extends Fragment {
         } else {
             builder = new Notification.Builder(getView().getContext());
         }
+        builder.setContentTitle("ILoveZappos");
+        builder.setContentText("The price has fallen below!");
+        builder.setSmallIcon(R.drawable.splash_background);
+        return builder.build();
+    }
+
+    private void scheduleNotification(Notification notification, String date) {
+        Intent notificationIntent = new Intent(getView().getContext(), NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, NOTIFICATION_ID++);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getView().getContext(),
+                0,
+                notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+
     }
 }

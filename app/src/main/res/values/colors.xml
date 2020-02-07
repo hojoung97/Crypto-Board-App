@@ -3,4 +3,6 @@
     <color name="colorPrimary">#66CF6D</color>
     <color name="colorPrimaryDark">#458B4A</color>
     <color name="colorAccent">#CDDC39</color>
+    <color name="greenBuy">#00C000</color>
+    <color name="redSell">#C70000</color>
 </resources>

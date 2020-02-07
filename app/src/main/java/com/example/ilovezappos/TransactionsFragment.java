@@ -1,6 +1,7 @@
 package com.example.ilovezappos;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,9 +12,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,6 +40,9 @@ public class TransactionsFragment extends Fragment {
     // Bar Chart
     private BarChart transactionChart;
 
+    // Error TextView
+    TextView errorText;
+
     // API data
     private List<TransactionItem> transactions;
 
@@ -55,6 +62,10 @@ public class TransactionsFragment extends Fragment {
 
         // Transaction History BarChart
         transactionChart = view.findViewById(R.id.transaction_chart);
+
+        // Error textView
+        errorText = view.findViewById(R.id.transaction_frag_error_text);
+        errorText.setVisibility(View.INVISIBLE);
 
         // Setup HTTP request handler using Retrofit
         retrofit = new Retrofit.Builder()
@@ -77,62 +88,94 @@ public class TransactionsFragment extends Fragment {
             @Override
             public void onResponse(Call<List<TransactionItem>> call, Response<List<TransactionItem>> response) {
                 if(!response.isSuccessful()) {
-
+                    errorText.setText("Code: " + response.code());
+                    errorText.setVisibility(View.VISIBLE);
+                    transactionChart.setVisibility(View.INVISIBLE);
                     return;
                 }
 
                 transactions = response.body();
 
-                // Each BarEntry object is a single y value which is 'amount' value
-                ArrayList<BarEntry> entries = new ArrayList<>();
+                // Two BarEntry object: Buy transactions and Sell transactions
+                ArrayList<BarEntry> buyEntries = new ArrayList<>();
+                ArrayList<BarEntry> sellEntries = new ArrayList<>();
 
                 int numberOfTransactions = transactions.size();
 
-                // Each element of ArrayList is the corresponding x-Axis label
-                String[] xData = new String[numberOfTransactions];
+                // Extra information such as price, ID, and date are gathered to show on MarkerView
+                String[] prices = new String[numberOfTransactions];
+                String[] ids = new String[numberOfTransactions];
+                String[] dates = new String[numberOfTransactions];
+
 
                 for(int i = 0; i < numberOfTransactions; i++) {
-                    // Y-Axis values which are 'Amount' value
-                    entries.add(new BarEntry(numberOfTransactions - 1 - i,
-                            Float.parseFloat(transactions.get(i).getAmount())));
+                    // Buy transactions and Sell transactions are separated out to have different color
+                    if (transactions.get(numberOfTransactions-1-i).getType().equals("0")){
+                        buyEntries.add(new BarEntry(i,
+                                Float.parseFloat(transactions.get(numberOfTransactions-1-i).getAmount())));
+                    } else if (transactions.get(numberOfTransactions-1-i).getType().equals("1")){
+                        sellEntries.add(new BarEntry(i,
+                                Float.parseFloat(transactions.get(numberOfTransactions-1-i).getAmount())));
+                    }
 
-                    // X-Axis labels which are 'date' value
-                    long timestamp = Long.parseLong(transactions.get(i).getDate());
+                    prices[i] = transactions.get(numberOfTransactions-1-i).getPrice();
+                    ids[i] = transactions.get(numberOfTransactions-1-i).getTid();
+
+                    // convert timestamp to date string
+                    long timestamp = Long.parseLong(transactions.get(numberOfTransactions-1-i).getDate());
                     Date date = new Date(timestamp*1000);
 
                     // convert Date object into String
                     DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
                     String strDate = df.format(date);
 
-                    xData[numberOfTransactions-1] = strDate;
+                    dates[i] = strDate;
                 }
 
+                // Custom MarkerView to display ID, price, and transaction date
+                CustomMarkerView markerView = new CustomMarkerView(getView().getContext(), R.layout.bar_marker,
+                        prices, ids, dates);
+                markerView.setOffset(0, 0);
+
                 // Prepare BarDataSet object with all the BarEntry objects
-                BarDataSet yData = new BarDataSet(entries, "Amount");
+                BarDataSet buyData = new BarDataSet(buyEntries, "Buy");
+                buyData.setColor(Color.GREEN);
+                buyData.setValueTextSize(12);
+                BarDataSet sellData = new BarDataSet(sellEntries, "Sell");
+                sellData.setColor(Color.RED);
+                sellData.setValueTextSize(12);
 
-                BarData chartData = new BarData(yData);
+                // chart configurations
+                BarData chartData = new BarData(buyData);
+                chartData.addDataSet(sellData);
+                transactionChart.setMarker(markerView);
                 transactionChart.setData(chartData);
+                transactionChart.setDrawGridBackground(false);
+                transactionChart.setDrawBarShadow(false);
+                transactionChart.setDrawValueAboveBar(true);
+                transactionChart.setFitBars(true);
+                transactionChart.setDrawBorders(false);
+                transactionChart.getDescription().setEnabled(false);
 
-                /*
-                XAxis xAxis = transactionChart.getXAxis();
-                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-                YAxis yAxis = transactionChart.getAxisLeft();
-                yAxis.setAxisMinimum(0f);
-                yAxis.setAxisMaximum(3f);
-
-                transactionChart.setVisibleXRangeMaximum(5);
-
-                 */
+                transactionChart.setTouchEnabled(true);
+                transactionChart.setDragEnabled(true);
+                transactionChart.setScaleEnabled(true);
+                transactionChart.setScaleXEnabled(true);
+                transactionChart.setScaleYEnabled(true);
+                transactionChart.setPinchZoom(true);
+                transactionChart.setDoubleTapToZoomEnabled(true);
+                transactionChart.setVisibleXRangeMaximum(10);
 
                 transactionChart.invalidate();
-                //transactionChart.animateY(5000);
+                transactionChart.animateY(5000);
 
             }
 
             @Override
             public void onFailure(Call<List<TransactionItem>> call, Throwable t) {
-
+                errorText.setText(t.getMessage());
+                errorText.setVisibility(View.VISIBLE);
+                transactionChart.setVisibility(View.INVISIBLE);
             }
         });
     }

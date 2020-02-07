@@ -41,4 +41,4 @@ Where I ended up with sort of messy and unorganized looking code and application
 it is very important to be able to qucikly pick-up new skillsets and create beautiful projects.
 
 ## Snapshots
-<img src="https://github.com/hojoung97/ILoveZappos/tree/master/images/start.png">
+<img src="https://github.com/hojoung97/ILoveZappos/tree/master/images/start.png" width="200">

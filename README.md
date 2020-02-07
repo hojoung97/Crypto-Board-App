@@ -42,3 +42,8 @@ it is very important to be able to qucikly pick-up new skillsets and create beau
 
 ## Snapshots
 <img src="https://github.com/hojoung97/ILoveZappos/blob/master/images/demo.gif" width="250">
+<img src="https://github.com/hojoung97/ILoveZappos/blob/master/images/start.png" width="250">
+<img src="https://github.com/hojoung97/ILoveZappos/blob/master/images/home.png" width="250">
+<img src="https://github.com/hojoung97/ILoveZappos/blob/master/images/transaction.png" width="250">
+<img src="https://github.com/hojoung97/ILoveZappos/blob/master/images/orderbook.png" width="250">
+<img src="https://github.com/hojoung97/ILoveZappos/blob/master/images/notification.png" width="250">

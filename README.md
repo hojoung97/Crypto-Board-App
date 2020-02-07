@@ -40,5 +40,5 @@ Weakness: I was not able to work with new tools such as mpAndroidChart, WorkMana
 Where I ended up with sort of messy and unorganized looking code and application which I did not aim for. Although I am just a beginner, still Android is such a huge world and there is a lot of tools to be learned, and I think that is why
 it is very important to be able to qucikly pick-up new skillsets and create beautiful projects.
 
-### Snapshots
-
+## Snapshots
+![](images/start.PNG)

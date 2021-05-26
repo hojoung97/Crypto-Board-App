@@ -1,4 +1,4 @@
-# Crypto Board
+# Crypto Board App
 
 ## Key Components
 - Transaction History

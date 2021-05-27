@@ -2,10 +2,14 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/colorPrimary"/>
 
-    <item>
-    <bitmap
-        android:gravity="center"
-        android:src="@mipmap/logo" />
+    <item
+        android:left="120dp"
+        android:right="120dp"
+        android:top="175dp"
+        android:bottom="175dp">
+        <bitmap
+            android:src="@mipmap/bitstamp_logo"
+            android:gravity="center" />
     </item>
 
 
